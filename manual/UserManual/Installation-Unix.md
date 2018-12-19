@@ -80,10 +80,10 @@ Certain versions on certain OSes will cause failures loading virus database:
 
 To install ClamAV locally on an unprivileged shell account you need not create any additional users or groups. Assuming your home directory is `/home/gary` you should build it as follows:
 
-<pre>
+```bash
     ./configure --prefix=/home/gary/clamav --disable-clamav
     make; make install
-</pre>
+```
 
 The `--disable-clamav` switch disables the check for existence of the `clamav` user and group but `clamscan` would still require an unprivileged account to work in a superuser mode.
 
@@ -107,18 +107,18 @@ If your operating system isn't specified above, and your OS does not have the `g
 
 Once you have created the clamav user and group, please extract the archive:
 
-<pre>
+```bash
     tar xzf clamav-<ver>.tar.gz
     cd clamav-<ver>
-</pre>
+```
 
 Assuming you want to install the configuration files in `/etc`, configure and build the software as follows:
 
-<pre>
+```bash
     ./configure --sysconfdir=/etc
     make
     su -c "make install"
-</pre>
+```
 
 In the last step, the software is installed into the `/usr/local` directory and the config files into `/etc`. **WARNING: Never enable the SUID or SGID bits for Clam AntiVirus binaries.**
 
@@ -133,10 +133,10 @@ First, create a database directory. This would be located under the install path
 
 You will need to create `freshclam.conf` and `clamd.conf` files in the config directory. In the above example, we chose `/etc`, so run the following.
 
-<pre>
+```bash
     sudo cp /etc/freshclam.conf.sample /etc/freshclam.conf
     sudo cp /etc/clamd.conf.sample /etc/clamd.conf
-</pre>
+```
 
 At a minimum, you will need to edit each file and remove or comment-out the `Example` line. In addition, for `clamd.conf` you will need to enable either `LocalSocket` or `TCPSocket`.
 
@@ -152,17 +152,17 @@ For additional recommendations, please read:
 
 To test your local installation execute:
 
-<pre>
+```
     ~/clamav/bin/freshclam
     ~/clamav/bin/clamscan ~
-</pre>
+```
 
 To test your system installation execute:
 
-<pre>
+```
     sudo freshclam
     sudo clamscan ~
-</pre>
+```
 
 ---
 
@@ -170,9 +170,9 @@ To test your system installation execute:
 
 The `libmilter` package and its development files are required. To enable clamav-milter, configure ClamAV with
 
-<pre>
+```
     ./configure --enable-milter
-</pre>
+```
 
 ---
 
@@ -180,11 +180,11 @@ The `libmilter` package and its development files are required. To enable clamav
 
 To configure ClamAV to use a system-installed LLVM library:
 
-<pre>
+```bash
     ./configure --with-system-llvm=/myllvm/bin/llvm-config
     make
     sudo make install
-</pre>
+```
 
 The argument to `--with-system-llvm` indicates the path name of the LLVM configuration utility (llvm-config). Alternatively, you may use `--enable-llvm` and `./configure` will search for LLVM in /usr/local/ and then /usr.
 
@@ -202,32 +202,32 @@ To help clamav’s configure script locate `check`, it is recommended that you i
 
 The recommended way to run unit-tests is the following, which ensures you will get an error if unit tests cannot be built:
 
-<pre>
+```bash
     ./configure --enable-check
     make
     make check
-</pre>
+```
 
 When `make check` is finished, you should get a message similar to this:
 
-<pre>
+```
     ==================
     All 8 tests passed
     ==================
-</pre>
+```
 
 If a unit test fails, you get a message similar to the following. Note that in older versions of make check may report failures due to the absence of optional packages. Please make sure you have the latest versions of the components noted in section /refsec:components. See the next section on how to report a bug when a unit test fails.
 
-<pre>
+```
     ========================================
     1 of 8 tests failed
     Please report to https://bugzilla.clamav.net/
     ========================================
-</pre>
+```
 
 If unit tests are disabled (and you didn’t use -–enable-check), you will get this message:
 
-<pre>
+```
     *** Unit tests disabled in this build
     *** Use ./configure --enable-check to enable them
 
@@ -240,7 +240,7 @@ If unit tests are disabled (and you didn’t use -–enable-check), you will get
     All 4 tests passed
     (1 tests were not run)
     ======================
-</pre>
+```
 
 Running `./configure --enable-check` should tell you why.
 
@@ -264,10 +264,10 @@ When writing a bug report regarding failed unit tests, please provide the follow
 - where and how you installed the check package
 - Output of `pkg-config check --cflags --libs`
 - Optionally if `valgrind` is available on your platform, the output of the following:
-    <pre>
+    ```
         make check
         CK_FORK=no ./libtool --mode=execute valgrind unit_tests/check_clamav
-    </pre>
+    ```
 
 ---
 
